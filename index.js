@@ -70,8 +70,9 @@ CachingWriter.rebuild = function () {
   var writer = this;
 
   var invalidateCache = false;
-  var key, dir, updateCacheResult, updatedTrees;
+  var key, dir, updateCacheResult;
   var lastKeys = [];
+  var updatedTrees = [];
 
   for (var i = 0, l = writer.inputPaths.length; i < l; i++) {
     dir = writer.inputPaths[i];
