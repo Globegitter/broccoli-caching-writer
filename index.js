@@ -70,7 +70,7 @@ CachingWriter.rebuild = function () {
   var writer = this;
 
   var invalidateCache = false;
-  var key, dir, updateCacheResult;
+  var key, dir, updateCacheResult, updatedTrees;
   var lastKeys = [];
 
   for (var i = 0, l = writer.inputPaths.length; i < l; i++) {
@@ -82,11 +82,17 @@ CachingWriter.rebuild = function () {
 
     if (!invalidateCache /* short circuit */ && !key.equal(lastKey)) {
       invalidateCache = true;
+      updatedTrees.push(dir);
     }
   }
 
   if (invalidateCache) {
-    var updateCacheSrcArg = writer.enforceSingleInputTree ? writer.inputPaths[0] : writer.inputPaths;
+    var updateCacheSrcArg = writer.inputPaths;
+    if (writer.enforceSingleInputTree) {
+      updateCacheSrcArg = writer.inputPaths[0]
+    } else if(writer.onlyReturnUpdatedTrees) {
+      var updateCacheSrcArg = updatedTrees;
+    }
 
     writer._lastKeys = lastKeys;
 
